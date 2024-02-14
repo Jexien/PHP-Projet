@@ -1,4 +1,6 @@
 <?php
+session_start();
+session_regenerate_id();
 // include_once 'users.php';
 $users = json_decode(file_get_contents('users.json'), true);
 // include_once 'includes/header.php';
@@ -27,7 +29,10 @@ else{
 ?>
 <main>
     <?php if(isset($_SESSION["LOGGED_USER"])) : ?>
+
         <h2>Bravo tu es connecté <?php echo $_SESSION["LOGGED_USER"]["nom"];?></h2>
+
+        <button onclick="window.location.href='my_to_do_list.php'";>My to do</button>
         <button onclick="window.location.href='logout.php'">Déconnexion</button>
     <?php else : ?>
         <h2>Echec</h2>
