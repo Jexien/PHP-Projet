@@ -1,6 +1,8 @@
 <?php 
 session_start();
 
+include 'headeron.php';
+
 if (isset($_POST['logout'])) {
     session_destroy();
     header('Location: login.php');
@@ -129,13 +131,50 @@ if (file_exists($filename)) {
     $todoList = json_decode(file_get_contents($filename), true);
     foreach ($todoList as $taskData) {
         echo "Tâche: " . $taskData['task'] . "<br>";
-        echo "Prioritée: " . $taskData['Priorite'] . "<br>";
+        echo "Priorité: " . $taskData['Priorite'] . "<br>";
         echo "Date butoir: " . $taskData['date'] . "<br>";
         echo "Catégorie: " . $taskData['catégorie'] . "<br>";
-        echo "Avancement: <span class=\"status-dot\"></span> " . $taskData['avancement'] . "<br>";
+        echo "Avancement: <span class=\"status-dot\"></span> " . $taskData['avancement'] . "<select name=\"avancement\" class=\"avancement_input\">
+            <option value=\"En cours\" " . ($taskData['avancement'] == 'En cours' ? 'selected' : '') . ">En cours</option>
+            <option value=\"Terminé\" " . ($taskData['avancement'] == 'Terminé' ? 'selected' : '') . ">Terminé</option>
+            <option value=\"En attente\" " . ($taskData['avancement'] == 'En attente' ? 'selected' : '') . ">En attente</option>
+        </select>";
+        echo "<br>";
+        echo "________________";
+        echo "<br>";
+        echo "<br>";
     }
 }
+
+if(isset($_POST['sauvegarder'])) {
+    // Récupérer les tâches existantes depuis le fichier JSON
+    $json = file_get_contents('Claire_todolist.json');
+    $todoList = json_decode($json, true);
+
+    // Mettre à jour les données des tâches
+    foreach($_POST as $key => $value) {
+        if(strpos($key, 'tache') === 0) {
+            $taskId = substr($key, 5);
+            // Rechercher la tâche correspondante dans la liste des tâches
+            foreach ($todoList as &$taskData) {
+                if ($taskData['taskID'] == $taskId) {
+                    // Mettre à jour l'avancement de la tâche
+                    $taskData['avancement'] = $value;
+                    break;
+                }
+            }
+        }
+    }
+
+    // Réécrire le fichier JSON avec les données mises à jour
+    $jsonUpdated = json_encode($todoList);
+    file_put_contents('Claire_todolist.json', $jsonUpdated);
+}
+
+
 ?>
+
+<input type="submit" name="sauvegarder" value="Sauvegarder">
 
 
     <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">

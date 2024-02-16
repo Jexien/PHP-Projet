@@ -1,7 +1,7 @@
 <?php
 session_start();
 session_regenerate_id();
-// include_once 'users.php';
+include 'headeron.php';
 $users = json_decode(file_get_contents('users.json'), true);
 // include_once 'includes/header.php';
 
