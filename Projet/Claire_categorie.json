@@ -1,5 +1,67 @@
-{
-    "0": "Défaut",
-    "1": "blablabla",
-    "2": "KevleGolmon"
-}
+[
+    {
+        "task": "Plop",
+        "taskID": "1",
+        "Priorite": "Moyenne",
+        "date": "2024-02-14",
+        "cat\u00e9gorie": "blablabla",
+        "avancement": "En attente"
+    },
+    {
+        "task": "Kevlecon",
+        "taskID": "2",
+        "Priorite": "Haute",
+        "date": "2024-02-28",
+        "cat\u00e9gorie": "KevleGolmon",
+        "avancement": "En attente"
+    },
+    {
+        "task": "Blablabla",
+        "Priorite": "Basse",
+        "date": "2024-02-19",
+        "cat\u00e9gorie": "D\u00e9faut",
+        "avancement": "En cours"
+    },
+    {
+        "task": "Tuer Kevin ce gros Golmon",
+        "Priorite": "Haute",
+        "date": "2024-02-20",
+        "cat\u00e9gorie": "KevleGigaGolmon",
+        "avancement": "En cours"
+    },
+    {
+        "task": "D\u00e9pass\u00e9",
+        "Priorite": null,
+        "date": "1921-12-02",
+        "cat\u00e9gorie": "D\u00e9faut",
+        "avancement": "En attente"
+    },
+    {
+        "task": "hgfdsdfgh",
+        "Priorite": null,
+        "date": "2024-02-19",
+        "cat\u00e9gorie": "D\u00e9faut",
+        "avancement": "En cours"
+    },
+    {
+        "task": "Test prio",
+        "Priorite": "Pas de priorit\u00e9",
+        "date": "2024-02-19",
+        "cat\u00e9gorie": "D\u00e9faut",
+        "avancement": "En cours"
+    },
+    {
+        "task": "test2 prio",
+        "Priorite": "Pas de priorit\u00e9",
+        "date": "2024-02-19",
+        "cat\u00e9gorie": "D\u00e9faut",
+        "avancement": "En cours"
+    },
+    {
+        "task": "Test prio3",
+        "Priorite": "Basse",
+        "date": "2024-02-19",
+        "cat\u00e9gorie": "D\u00e9faut",
+        "avancement": "En cours"
+    }
+]

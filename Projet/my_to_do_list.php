@@ -3,6 +3,8 @@ session_start();
 
 include 'headeron.php';
 
+$priority = "pas de priorité";
+
 if (isset($_POST['logout'])) {
     session_destroy();
     header('Location: login.php');
@@ -46,10 +48,12 @@ if (isset($_POST['add_category'])) {
 ?>
 
 <?php
+
+
 if (isset($_POST['creer'])) {
     $taskData = [
         'task' => $_POST['task'],
-        'Priorite' => isset($_POST['Priorite']) ? $_POST['Priorite'] : null,
+        'Priorite' => isset($_POST['Priorite']) ? $_POST['Priorite'] : 'Pas de priorité',
         'date' => $_POST['date'],
         'catégorie' => isset($_POST['catégorie']) ? $_POST['catégorie'] : null,
         'avancement' => $_POST['avancement'] ? $_POST['avancement'] : null
@@ -75,6 +79,8 @@ if (isset($_POST['creer'])) {
 }
 ?>
 
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -87,11 +93,11 @@ if (isset($_POST['creer'])) {
             Tâche :   
             <input type="text" name="task" class="task_input"><br>
             Priorité :<br>
-            <input type="radio" name="Priorite" value="Basse"> Basse<br>
+            <input type="radio" name="Priorite" value="Basse" checked > Basse<br>
             <input type="radio" name="Priorite" value="Moyenne"> Moyenne<br>
             <input type="radio" name="Priorite" value="Haute"> Haute <br>
             Date limite :
-            <input type="date" name="date" id="date" value="<?php echo date('Y-m-d'); ?>" min="<?php echo date('Y-m-d'); ?>"> <br>
+            <input type="date" name="date" id="date" value="<?php echo date('Y-m-d'); ?>" ?> <br>
             Catégorie : 
             <select name="catégorie" class="catégorie_input">
                 <?php
@@ -134,11 +140,7 @@ if (file_exists($filename)) {
         echo "Priorité: " . $taskData['Priorite'] . "<br>";
         echo "Date butoir: " . $taskData['date'] . "<br>";
         echo "Catégorie: " . $taskData['catégorie'] . "<br>";
-        echo "Avancement: <span class=\"status-dot\"></span> " . $taskData['avancement'] . "<select name=\"avancement\" class=\"avancement_input\">
-            <option value=\"En cours\" " . ($taskData['avancement'] == 'En cours' ? 'selected' : '') . ">En cours</option>
-            <option value=\"Terminé\" " . ($taskData['avancement'] == 'Terminé' ? 'selected' : '') . ">Terminé</option>
-            <option value=\"En attente\" " . ($taskData['avancement'] == 'En attente' ? 'selected' : '') . ">En attente</option>
-        </select>";
+        echo "Avancement: <span class=\"status-dot\"></span> " . $taskData['avancement'] . "<br>";
         echo "<br>";
         echo "________________";
         echo "<br>";
@@ -146,31 +148,40 @@ if (file_exists($filename)) {
     }
 }
 
-if(isset($_POST['sauvegarder'])) {
-    // Récupérer les tâches existantes depuis le fichier JSON
-    $json = file_get_contents('Claire_todolist.json');
-    $todoList = json_decode($json, true);
+foreach ($todoList as $index => $taskData) {
+    echo "Tâche: " . $taskData['task'] . "<br>";
+    // Afficher les autres détails de la tâche
 
-    // Mettre à jour les données des tâches
-    foreach($_POST as $key => $value) {
-        if(strpos($key, 'tache') === 0) {
-            $taskId = substr($key, 5);
-            // Rechercher la tâche correspondante dans la liste des tâches
-            foreach ($todoList as &$taskData) {
-                if ($taskData['taskID'] == $taskId) {
-                    // Mettre à jour l'avancement de la tâche
-                    $taskData['avancement'] = $value;
-                    break;
-                }
-            }
-        }
-    }
-
-    // Réécrire le fichier JSON avec les données mises à jour
-    $jsonUpdated = json_encode($todoList);
-    file_put_contents('Claire_todolist.json', $jsonUpdated);
+    // Bouton de modification
+    echo '<form method="post" action="' . $_SERVER['PHP_SELF'] . '">';
+    echo '<input type="hidden" name="task_index" value="' . $index . '">';
+    echo '<input type="submit" name="edit_task" value="Modifier">';
+    echo '</form>';
 }
+if (isset($_POST['edit_task'])) {
+    $index = $_POST['task_index'];
+    $taskToEdit = $todoList[$index];
+    ?>
+    <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+        <input type="hidden" name="task_index" value="<?php echo $index; ?>">
+        Nouveau nom de la tâche : <input type="text" name="new_task_name" value="<?php echo $taskToEdit['task']; ?>"><br>
+        <!-- Ajoutez d'autres champs de formulaire pour les autres détails de la tâche -->
+        <input type="submit" name="save_changes" value="Enregistrer les modifications">
+    </form>
+    <?php
+}
+if (isset($_POST['save_changes'])) {
+    $index = $_POST['task_index'];
+    $newTaskName = $_POST['new_task_name'];
+    // Mettez à jour les autres champs de formulaire nécessaires
 
+    // Mettez à jour la tâche correspondante dans $todoList
+    $todoList[$index]['task'] = $newTaskName;
+    // Mettez à jour les autres champs de formulaire nécessaires
+
+    // Écrivez le contenu mis à jour dans le fichier JSON
+    file_put_contents($filename, json_encode($todoList, JSON_PRETTY_PRINT));
+}
 
 ?>
 
